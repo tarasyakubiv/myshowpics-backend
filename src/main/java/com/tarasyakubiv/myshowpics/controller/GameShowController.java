@@ -8,10 +8,7 @@ import javax.validation.Valid;
 import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.domain.GameShow;
 import com.tarasyakubiv.myshowpics.domain.Image;
-import com.tarasyakubiv.myshowpics.exception.ResourceNotFoundException;
-import com.tarasyakubiv.myshowpics.repository.ContestantRepository;
-import com.tarasyakubiv.myshowpics.repository.GameShowRepository;
-import com.tarasyakubiv.myshowpics.repository.ImageRepository;
+import com.tarasyakubiv.myshowpics.service.GameShowService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,74 +25,45 @@ import org.springframework.web.bind.annotation.RestController;
 public class GameShowController {
 
     @Autowired
-    GameShowRepository gameShowRepository;
-
-    @Autowired
-    ImageRepository imageRepository;
-
-    @Autowired
-    ContestantRepository contestantRepository;
+    GameShowService gameShowService;
 
     @GetMapping
     public List<GameShow> getAllShows() {
-        return gameShowRepository.findAll();
+        return gameShowService.getAllShows();
     }
 
     @GetMapping("/{id}")
     public GameShow getShow(@PathVariable("id") Integer id) {
-        return gameShowRepository.findById(id).
-                                        orElseThrow(() -> new ResourceNotFoundException("Show", "id", id));
+        return gameShowService.getShow(id);
     }
 
     @PostMapping
     public GameShow createShow(@Valid @RequestBody GameShow show) {
-        return gameShowRepository.save(show);
+        return gameShowService.createShow(show);
     }
 
     @DeleteMapping("/{id}")
     public void deleteShow(@PathVariable("id") Integer id) {
-        GameShow show = gameShowRepository.findById(id).
-                                        orElseThrow(() -> new ResourceNotFoundException("Show", "id", id));
-        show.getContestants().forEach(contestant -> {
-                                                contestant.getGameShows().remove(show);
-                                                contestantRepository.save(contestant);
-        }); 
-        show.getImages().forEach(image -> {
-                                            image.setGameShow(null);
-                                            imageRepository.save(image);
-        });         
-        gameShowRepository.delete(show);
+        gameShowService.deleteShow(id);
     }
 
-    @PutMapping("/{id}/contestant/{contestantId}")
+    @GetMapping("/{id}/contestants")
+    public Set<Contestant> getContestants(@PathVariable("id") Integer id) {
+        return gameShowService.getContestants(id);
+    }
+
+    @PutMapping("/{id}/contestants/{contestantId}")
     public void addContestant(@PathVariable("id") Integer id, @PathVariable("contestantId") Integer contestantId) {
-        Contestant contestant = contestantRepository.findById(id).
-                                orElseThrow(() -> new ResourceNotFoundException("Show", "id", id));
-        GameShow gameShow = gameShowRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("GameShow", "id", id));
-        gameShow.getContestants().add(contestant);
-        gameShowRepository.save(gameShow);
+        gameShowService.addContestant(id, contestantId);
     }
 
-    @DeleteMapping("/{id}/contestant/{contestantId}")
+    @DeleteMapping("/{id}/contestants/{contestantId}")
     public void deleteContestant(@PathVariable("id") Integer id, @PathVariable("contestantId") Integer contestantId) {
-        Contestant contestant = contestantRepository.findById(id).
-                                orElseThrow(() -> new ResourceNotFoundException("Contestant", "id", id));
-        GameShow gameShow = gameShowRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("GameShow", "id", id));
-        gameShow.getContestants().remove(contestant);
-        gameShowRepository.save(gameShow);
+        gameShowService.deleteContestant(id, contestantId);
     }
 
     @GetMapping("/{id}/images")
     public Set<Image> getImagesByShow(@PathVariable("id") Integer id) {
-        GameShow show = gameShowRepository.findById(id).
-                                        orElseThrow(() -> new ResourceNotFoundException("Show", "id", id));
-        return imageRepository.findAllByGameShow(show);
+        return gameShowService.getImagesByShow(id);
     }
-
-
-
-
-
 }

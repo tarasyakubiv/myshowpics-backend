@@ -37,7 +37,7 @@ public class GameShow {
     @NonNull
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "gameshow_contestant", 
       joinColumns = @JoinColumn(name = "gameshow_id", 
                                 referencedColumnName = "id"), 
@@ -45,7 +45,7 @@ public class GameShow {
                                       referencedColumnName = "id"))
 	Set<Contestant> contestants = new HashSet<>();
 
-    @OneToMany(mappedBy = "gameShow", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "gameShow", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Image> images = new HashSet<>();
 
 

@@ -3,6 +3,7 @@ package com.tarasyakubiv.myshowpics.domain;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,7 +37,7 @@ public class Contestant {
     @ManyToMany(mappedBy = "contestants")
     private Set<Image> images = new HashSet<>();
 
-    @ManyToMany(mappedBy = "contestants")
+    @ManyToMany(mappedBy = "contestants", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<GameShow> gameShows = new HashSet<>();
 
 }

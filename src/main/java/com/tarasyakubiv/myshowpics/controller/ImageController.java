@@ -10,6 +10,7 @@ import com.tarasyakubiv.myshowpics.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,17 +50,17 @@ public class ImageController {
         imageService.deleteImage(id);
     }
 
-    @PutMapping("/{id}/tags/{tagId}")
+    @PatchMapping("/{id}/tags/{tagId}")
     public Image createImageTag(@PathVariable("id") Integer id, @PathVariable("tagId") Integer tagId) {
         return imageService.createImageTag(id, tagId);
     }
 
-    @PutMapping("/{id}/contestants/{contestantId}")
+    @PatchMapping("/{id}/contestants/{contestantId}")
     public Image addContestant(@PathVariable("id") Integer id, @PathVariable("contestantId") Integer contestantId) {
         return imageService.addContestant(id, contestantId);
     }
 
-    @PutMapping("/{id}/show/{showId}")
+    @PatchMapping("/{id}/show/{showId}")
     public Image setShow(@PathVariable("id") Integer id, @PathVariable("showId") Integer showId) {
         return imageService.setShow(id, showId);
     }

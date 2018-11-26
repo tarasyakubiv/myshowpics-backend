@@ -57,7 +57,7 @@ public class ImageService {
     }
 
     public Image createImageTag(Integer id, Integer tagId) {
-        Image image = imageRepository.findById(tagId).
+        Image image = imageRepository.findById(id).
                         orElseThrow(() -> new ResourceNotFoundException("Image"));
         Tag tag = tagRepository.findById(tagId).
                         orElseThrow(() -> new ResourceNotFoundException("Tag"));

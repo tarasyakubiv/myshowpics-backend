@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+
 import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.domain.GameShow;
 import com.tarasyakubiv.myshowpics.domain.Image;
@@ -49,66 +51,53 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
-    public Image updateImage(Integer id, Image image) {
-        imageRepository.findById(id).
-                            orElseThrow(() -> new ResourceNotFoundException("Image"));
-        image.setId(id);
-        return imageRepository.save(image);
+    public Image updateImage(Image oldImage, Image newImage) {
+        newImage.setId(oldImage.getId());
+        return imageRepository.save(newImage);
     }
 
-    public void deleteImage(Integer id) {
-        Image image = imageRepository.findById(id).
-                                orElseThrow(() -> new ResourceNotFoundException("Image"));
+    public void deleteImage(Image image) {
+        image.getContestants().clear();
+        image.getTags().clear();
+        image.setGameShow(null);
         imageRepository.delete(image);
     }
 
-    public Image createImageTag(Integer id, Integer tagId) {
-        Image image = imageRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("Image"));
+    public Image createImageTag(Image image, Integer tagId) {
         Tag tag = tagRepository.findById(tagId).
                         orElseThrow(() -> new ResourceNotFoundException("Tag"));
         image.getTags().add(tag);
         return imageRepository.save(image);
     }
 
-    public Image addContestant(Integer id, Integer contestantId) {
-        Image image = imageRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("Image"));
+    public Image addContestant(Image image, Integer contestantId) {
         Contestant contestant = contestantRepository.findById(contestantId).
                         orElseThrow(() -> new ResourceNotFoundException("Contestant"));
         image.getContestants().add(contestant);
         return imageRepository.save(image);
     }
 
-    public Image setShow(Integer id, Integer showId) {
-        Image image = imageRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("Image"));
+    public Image setShow(Image image, Integer showId) {
         GameShow gameShow = showRepository.findById(showId).
                                 orElseThrow(() -> new ResourceNotFoundException("GameShow"));
         image.setGameShow(gameShow);
         return imageRepository.save(image);
     }
 
-    public Image deleteShow(Integer id) {
-        Image image = imageRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("Image"));
+    public Image deleteShow(Image image) {
         image.setGameShow(null);
         return imageRepository.save(image);
     }
 
-    public Image deleteContestant(Integer id, Integer contestantId) {
-        Image image =imageRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("Image"));
-        Contestant contestant = contestantRepository.findById(id).
+    public Image deleteContestant(Image image, Integer contestantId) {
+        Contestant contestant = contestantRepository.findById(contestantId).
                                                 orElseThrow(() -> new ResourceNotFoundException("Contestant"));
         image.getContestants().remove(contestant);
         return imageRepository.save(image);
     }
 
-    public Image deleteImageTag(Integer id, Integer tagId) {
-        Image image = imageRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("Image"));
-        Tag tag = tagRepository.findById(id).
+    public Image deleteImageTag(Image image, Integer tagId) {
+        Tag tag = tagRepository.findById(tagId).
                         orElseThrow(() -> new ResourceNotFoundException("Tag"));
         image.getTags().remove(tag);
         return imageRepository.save(image);

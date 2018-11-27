@@ -39,14 +39,9 @@ public class ContestantService {
     public void deleteContestant(Integer id) {
         Contestant contestant = contestantRepository.findById(id).
                                             orElseThrow(() -> new ResourceNotFoundException("Contestant"));
-        contestant.getImages().forEach(image -> {
-                                                image.getContestants().remove(contestant);
-                                                imageRepository.save(image);
-        });
-        contestant.getGameShows().forEach(show -> {
-                                                    show.getContestants().remove(contestant);
-                                                    showRepository.save(show);
-        });                                             
+        contestant.getImages().clear();
+        contestant.getGameShows().clear();
+        contestantRepository.save(contestant);                                    
         contestantRepository.delete(contestant);
     }
 }

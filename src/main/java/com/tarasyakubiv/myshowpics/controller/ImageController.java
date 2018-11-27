@@ -50,42 +50,42 @@ public class ImageController {
 
     @PutMapping("/{id}")
     public Image updateImage(@PathVariable("id") Integer id, @Valid @RequestBody Image image) {
-        return imageService.updateImage(id, image);
+        return imageService.updateImage(imageService.getImage(id), image);
     }
 
     @DeleteMapping("/{id}")
     public void deleteImage(@PathVariable("id") Integer id) {
-        imageService.deleteImage(id);
+        imageService.deleteImage(imageService.getImage(id));
     }
 
     @PatchMapping("/{id}/tags/{tagId}")
     public Image createImageTag(@PathVariable("id") Integer id, @PathVariable("tagId") Integer tagId) {
-        return imageService.createImageTag(id, tagId);
+        return imageService.createImageTag(imageService.getImage(id), tagId);
     }
 
     @PatchMapping("/{id}/contestants/{contestantId}")
     public Image addContestant(@PathVariable("id") Integer id, @PathVariable("contestantId") Integer contestantId) {
-        return imageService.addContestant(id, contestantId);
+        return imageService.addContestant(imageService.getImage(id), contestantId);
     }
 
     @PatchMapping("/{id}/show/{showId}")
     public Image setShow(@PathVariable("id") Integer id, @PathVariable("showId") Integer showId) {
-        return imageService.setShow(id, showId);
+        return imageService.setShow(imageService.getImage(id), showId);
     }
 
     @DeleteMapping("/{imageId}/show")
-    public Image deleteShow(@PathVariable("imageId") Integer imageId) {
-        return imageService.deleteShow(imageId);
+    public Image deleteShow(@PathVariable("imageId") Integer id) {
+        return imageService.deleteShow(imageService.getImage(id));
     }
 
     @DeleteMapping("/{imageId}/contestants/{contestantId}")
-    public Image deleteContestant(@PathVariable("imageId") Integer imageId, @PathVariable("contestantId") Integer contestantId) {
-        return imageService.deleteContestant(imageId, contestantId);
+    public Image deleteContestant(@PathVariable("imageId") Integer id, @PathVariable("contestantId") Integer contestantId) {
+        return imageService.deleteContestant(imageService.getImage(id), contestantId);
     }
 
     @DeleteMapping("/{imageId}/tags/{tagId}")
-    public Image deleteImageTag(@PathVariable("imageId") Integer imageId, @PathVariable("tagId") Integer tagId) {
-        return imageService.deleteImageTag(imageId, tagId);
+    public Image deleteImageTag(@PathVariable("imageId") Integer id, @PathVariable("tagId") Integer tagId) {
+        return imageService.deleteImageTag(imageService.getImage(id), tagId);
     }
     
 }

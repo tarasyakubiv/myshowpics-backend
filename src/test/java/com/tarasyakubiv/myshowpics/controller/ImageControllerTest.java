@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.given;
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@WebMvcTest(ImageController.class)
 public class ImageControllerTest {
     @MockBean
 	private ImageService imageService;

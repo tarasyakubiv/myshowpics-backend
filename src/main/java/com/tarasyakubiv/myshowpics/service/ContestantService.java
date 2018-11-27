@@ -5,8 +5,6 @@ import java.util.List;
 import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.exception.ResourceNotFoundException;
 import com.tarasyakubiv.myshowpics.repository.ContestantRepository;
-import com.tarasyakubiv.myshowpics.repository.GameShowRepository;
-import com.tarasyakubiv.myshowpics.repository.ImageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +14,6 @@ public class ContestantService {
 
     @Autowired
     private ContestantRepository contestantRepository;
-
-    @Autowired
-    private ImageRepository imageRepository;
-
-    @Autowired
-    private GameShowRepository showRepository;
 
     public List<Contestant> getAllContestants() {
         return contestantRepository.findAll();

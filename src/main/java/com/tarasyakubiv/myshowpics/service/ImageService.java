@@ -1,6 +1,12 @@
 package com.tarasyakubiv.myshowpics.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.domain.GameShow;
@@ -106,6 +112,53 @@ public class ImageService {
                         orElseThrow(() -> new ResourceNotFoundException("Tag"));
         image.getTags().remove(tag);
         return imageRepository.save(image);
+    }
+
+    public Set<Image> findImages(Optional<String> show, Optional<String> tags, Optional<String> contestants, Optional<Boolean> tagsAnd, Optional<Boolean> contestantsAnd) {
+        final List<Tag> tagsList;
+        final List<Contestant> contestantsList;
+        if(tags.isPresent()) {
+            tagsList = tagRepository.findByNameIn(Arrays.asList(tags.get().split(",")));
+        } else {
+            tagsList = new ArrayList<>();
+        }
+        if(contestants.isPresent()) {
+            contestantsList = contestantRepository.findByFullNameIn(Arrays.asList(contestants.get().split(",")));
+        } else {
+            contestantsList = new ArrayList<>();
+        }
+        Set<Image> resultImages = new HashSet<>();
+        imageRepository.findAll().parallelStream().forEach(image -> {
+            if(show.isPresent()) {
+                if(image.getGameShow().equals(null) || !image.getGameShow().getName().equals(show.get())) {
+                    return;
+                }
+            }
+            if(tags.isPresent()) {
+                if(tagsAnd.isPresent() && tagsAnd.get()) {
+                    if(image.getTags().isEmpty() || !image.getTags().containsAll(tagsList)) {
+                        return;
+                    }
+                } else {
+                    if(image.getTags().isEmpty() || Collections.disjoint(image.getTags(), tagsList)){
+                        return;
+                    }
+                }
+            }
+            if(contestants.isPresent()) {
+                if(contestantsAnd.isPresent() && contestantsAnd.get()) {
+                    if(image.getContestants().isEmpty() || !image.getContestants().containsAll(contestantsList)) {
+                        return;
+                    }
+                } else {
+                    if(image.getContestants().isEmpty() || Collections.disjoint(image.getContestants(), contestantsList)){
+                        return;
+                    }
+                }
+            }
+            resultImages.add(image);
+        }); 
+        return resultImages;
     }
 
 }

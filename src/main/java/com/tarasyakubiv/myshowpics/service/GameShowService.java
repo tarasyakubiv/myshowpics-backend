@@ -42,8 +42,14 @@ public class GameShowService {
     public void deleteShow(Integer id) {
         GameShow show = showRepository.findById(id).
                                             orElseThrow(() -> new ResourceNotFoundException("Show"));
-        show.getImages().clear();
-        show.getContestants().clear();                                          
+        show.getImages().forEach(image -> {
+                                    image.setGameShow(null);
+                                    imageRepository.save(image);
+        }); 
+        show.getContestants().forEach(contestant -> {
+            contestant.getGameShows().remove(show);
+            contestantRepository.save(contestant);
+        });                                          
         showRepository.delete(show);
     }
 

@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-
 import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.domain.GameShow;
 import com.tarasyakubiv.myshowpics.domain.Image;

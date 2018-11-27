@@ -37,7 +37,7 @@ public class GameShow {
     @NonNull
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "gameshow_contestant", 
       joinColumns = @JoinColumn(name = "gameshow_id", 
                                 referencedColumnName = "id"), 

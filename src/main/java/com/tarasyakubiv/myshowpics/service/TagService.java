@@ -36,7 +36,10 @@ public class TagService {
     public void deleteTag(Integer id) {
         Tag tag = tagRepository.findById(id).
                             orElseThrow(() -> new ResourceNotFoundException("Tag"));
-        tag.getImages().clear();
+        tag.getImages().forEach(image -> {
+            image.getTags().remove(tag);
+            imageRepository.save(image);
+        });
         tagRepository.delete(tag);
     }
 }

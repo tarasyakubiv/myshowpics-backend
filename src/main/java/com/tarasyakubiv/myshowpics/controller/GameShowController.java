@@ -46,26 +46,26 @@ public class GameShowController {
 
     @DeleteMapping("/{id}")
     public void deleteShow(@PathVariable("id") Integer id) {
-        gameShowService.deleteShow(id);
+        gameShowService.deleteShow(gameShowService.getShow(id));
     }
 
     @GetMapping("/{id}/contestants")
     public Set<Contestant> getContestants(@PathVariable("id") Integer id) {
-        return gameShowService.getContestants(id);
+        return gameShowService.getContestants(gameShowService.getShow(id));
     }
 
     @PatchMapping("/{id}/contestants/{contestantId}")
     public void addContestant(@PathVariable("id") Integer id, @PathVariable("contestantId") Integer contestantId) {
-        gameShowService.addContestant(id, contestantId);
+        gameShowService.addContestant(gameShowService.getShow(id), contestantId);
     }
 
     @DeleteMapping("/{id}/contestants/{contestantId}")
     public void deleteContestant(@PathVariable("id") Integer id, @PathVariable("contestantId") Integer contestantId) {
-        gameShowService.deleteContestant(id, contestantId);
+        gameShowService.deleteContestant(gameShowService.getShow(id), contestantId);
     }
 
     @GetMapping("/{id}/images")
     public Set<Image> getImagesByShow(@PathVariable("id") Integer id) {
-        return gameShowService.getImagesByShow(id);
+        return gameShowService.getImagesByShow(gameShowService.getShow(id));
     }
 }

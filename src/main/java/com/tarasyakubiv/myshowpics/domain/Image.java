@@ -19,10 +19,12 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Image {
@@ -34,11 +36,11 @@ public class Image {
     @NonNull
     private String image;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "gameshow_id")
     private GameShow gameShow;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "contestant_image", 
       joinColumns = @JoinColumn(name = "contestant_id", 
                                 referencedColumnName = "id"), 
@@ -46,7 +48,7 @@ public class Image {
                                       referencedColumnName = "id"))
 	  Set<Contestant> contestants = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "tag_image", 
       joinColumns = @JoinColumn(name = "tag_id", 
                                 referencedColumnName = "id"), 

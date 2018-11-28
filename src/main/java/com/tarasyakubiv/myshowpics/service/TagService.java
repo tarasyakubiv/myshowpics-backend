@@ -33,13 +33,15 @@ public class TagService {
         return tagRepository.save(tagInUse);
     }
 
-    public void deleteTag(Integer id) {
-        Tag tag = tagRepository.findById(id).
-                            orElseThrow(() -> new ResourceNotFoundException("Tag"));
+    public void deleteTag(Tag tag) {
         tag.getImages().forEach(image -> {
             image.getTags().remove(tag);
             imageRepository.save(image);
         });
         tagRepository.delete(tag);
     }
+
+    public List<Tag> findByNameIn(List<String> names) {
+        return tagRepository.findByNameIn(names);
+    } 
 }

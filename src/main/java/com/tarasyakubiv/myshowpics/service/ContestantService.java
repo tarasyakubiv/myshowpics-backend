@@ -15,6 +15,12 @@ public class ContestantService {
     @Autowired
     private ContestantRepository contestantRepository;
 
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private GameShowService showService;
+
     public List<Contestant> getAllContestants() {
         return contestantRepository.findAll();
     }
@@ -28,12 +34,24 @@ public class ContestantService {
         return contestantRepository.save(contestant);
     }
 
-    public void deleteContestant(Integer id) {
-        Contestant contestant = contestantRepository.findById(id).
-                                            orElseThrow(() -> new ResourceNotFoundException("Contestant"));
-        contestant.getImages().clear();
-        contestant.getGameShows().clear();
-        contestantRepository.save(contestant);                                    
+    public Contestant updateContestant(Integer id, Contestant newContestant) {
+        newContestant.setId(id);
+        return contestantRepository.save(newContestant);
+    }
+
+    public void deleteContestant(Contestant contestant) {
+        contestant.getImages().forEach(image -> {
+            image.getContestants().remove(contestant);
+            imageService.updateImage(image.getId(), image);
+        });
+        contestant.getGameShows().forEach(gameShow -> {
+            gameShow.getContestants().remove(contestant);
+            showService.updateShow(gameShow.getId(), gameShow);
+        });                                 
         contestantRepository.delete(contestant);
+    }
+
+    public List<Contestant> findByNameIn(List<String> names) {
+        return contestantRepository.findByNameIn(names);
     }
 }

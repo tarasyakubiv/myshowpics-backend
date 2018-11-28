@@ -7,9 +7,7 @@ import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.domain.GameShow;
 import com.tarasyakubiv.myshowpics.domain.Image;
 import com.tarasyakubiv.myshowpics.exception.ResourceNotFoundException;
-import com.tarasyakubiv.myshowpics.repository.ContestantRepository;
 import com.tarasyakubiv.myshowpics.repository.GameShowRepository;
-import com.tarasyakubiv.myshowpics.repository.ImageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class GameShowService {
 
     @Autowired
-    private ContestantRepository contestantRepository;
+    private ContestantService contestantService;
 
     @Autowired
-    private ImageRepository imageRepository;
+    private ImageService imageService;
 
     @Autowired
     private GameShowRepository showRepository;
@@ -39,47 +37,36 @@ public class GameShowService {
         return showRepository.save(show);
     }
 
-    public void deleteShow(Integer id) {
-        GameShow show = showRepository.findById(id).
-                                            orElseThrow(() -> new ResourceNotFoundException("Show"));
+    public GameShow updateShow(Integer id, GameShow show) {
+        show.setId(id);
+        return showRepository.save(show);
+    }
+
+    public void deleteShow(GameShow show) {
         show.getImages().forEach(image -> {
-                                    image.setGameShow(null);
-                                    imageRepository.save(image);
-        }); 
-        show.getContestants().forEach(contestant -> {
-            contestant.getGameShows().remove(show);
-            contestantRepository.save(contestant);
-        });                                          
+            image.setGameShow(null);
+            imageService.updateImage(image.getId(), image);
+        });                                     
         showRepository.delete(show);
     }
 
-    public Set<Contestant> getContestants(Integer id) {
-        GameShow show = showRepository.findById(id).
-                                        orElseThrow(() -> new ResourceNotFoundException("Show"));
+    public Set<Contestant> getContestants(GameShow show) {
         return show.getContestants();
     }
 
-    public void addContestant(Integer id, Integer contestantId) {
-        Contestant contestant = contestantRepository.findById(id).
-                                orElseThrow(() -> new ResourceNotFoundException("Show"));
-        GameShow gameShow = showRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("GameShow"));
-        gameShow.getContestants().add(contestant);
-        showRepository.save(gameShow);
+    public void addContestant(GameShow show, Integer id) {
+        Contestant contestant = contestantService.getContestant(id);
+        show.getContestants().add(contestant);
+        showRepository.save(show);
     }
 
-    public void deleteContestant(Integer id, Integer contestantId) {
-        Contestant contestant = contestantRepository.findById(id).
-                                orElseThrow(() -> new ResourceNotFoundException("Contestant"));
-        GameShow gameShow = showRepository.findById(id).
-                        orElseThrow(() -> new ResourceNotFoundException("GameShow"));
-        gameShow.getContestants().remove(contestant);
-        showRepository.save(gameShow);
+    public void deleteContestant(GameShow show, Integer id) {
+        Contestant contestant = contestantService.getContestant(id);
+        show.getContestants().remove(contestant);
+        showRepository.save(show);
     }
 
-    public Set<Image> getImagesByShow( Integer id) {
-        GameShow show = showRepository.findById(id).
-                                        orElseThrow(() -> new ResourceNotFoundException("Show"));
+    public Set<Image> getImagesByShow(GameShow show) {
         return show.getImages();
     }
 }

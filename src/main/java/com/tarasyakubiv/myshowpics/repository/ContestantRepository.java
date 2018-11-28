@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ContestantRepository extends JpaRepository<Contestant, Integer> {
 
-    Optional<Contestant> findOptionalByFullName(String name);
+    Optional<Contestant> findOptionalByName(String name);
 
-    List<Contestant> findByFullNameIn(List<String> names);
+    List<Contestant> findByNameIn(List<String> names);
 }

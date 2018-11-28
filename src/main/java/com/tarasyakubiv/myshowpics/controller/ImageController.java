@@ -1,8 +1,5 @@
 package com.tarasyakubiv.myshowpics.controller;
 
-import java.util.Optional;
-import java.util.Set;
-
 import javax.validation.Valid;
 
 import com.tarasyakubiv.myshowpics.domain.Image;
@@ -18,25 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/images")
+@RequestMapping("/image")
 public class ImageController {
 
     @Autowired
     ImageService imageService;
-
-    @GetMapping
-    public Set<Image> getAllImages(@RequestParam(value="show", required = false) Optional<String> show,
-                                    @RequestParam(value="tags", required = false) Optional<String> tags,
-                                    @RequestParam(value="contestants", required = false) Optional<String> contestants,
-                                    @RequestParam(value="tags_and", required = false) Optional<Boolean> tagsAnd,
-                                    @RequestParam(value="contestants_and", required = false) Optional<Boolean> contestantsAnd) {
-        return imageService.findImages(show, tags, contestants, tagsAnd, contestantsAnd);
-    }
 
     @GetMapping("/{id}")
     public Image getImage(@PathVariable("id") Integer id) {
@@ -50,7 +37,7 @@ public class ImageController {
 
     @PutMapping("/{id}")
     public Image updateImage(@PathVariable("id") Integer id, @Valid @RequestBody Image image) {
-        return imageService.updateImage(imageService.getImage(id), image);
+        return imageService.updateImage(id, image);
     }
 
     @DeleteMapping("/{id}")
@@ -68,12 +55,12 @@ public class ImageController {
         return imageService.addContestant(imageService.getImage(id), contestantId);
     }
 
-    @PatchMapping("/{id}/show/{showId}")
+    @PatchMapping("/{id}/shows/{showId}")
     public Image setShow(@PathVariable("id") Integer id, @PathVariable("showId") Integer showId) {
         return imageService.setShow(imageService.getImage(id), showId);
     }
 
-    @DeleteMapping("/{imageId}/show")
+    @DeleteMapping("/{imageId}/shows")
     public Image deleteShow(@PathVariable("imageId") Integer id) {
         return imageService.deleteShow(imageService.getImage(id));
     }

@@ -46,8 +46,7 @@ public class ImageSearchService {
         imageRepository.findAll().parallelStream().forEach(image -> {
             System.out.println(image.getId());
             if(show.isPresent()) {
-                if(image.getGameShow().equals(null) 
-                || !image.getGameShow().getName().equals(show.get())) {
+                if(image.getGameShow() == null || !image.getGameShow().getName().equals(show.get())) {
                     return;
                 }
             }

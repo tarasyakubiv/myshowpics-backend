@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,4 +51,16 @@ public class ContestantController {
     public void deleteContestant(@PathVariable("id") Integer id) {
         contestantService.deleteContestant(contestantService.getContestant(id));
     }
+
+    @PatchMapping("/{id}/shows/{showId}")
+    public void addShow(@PathVariable("id") Integer id, @PathVariable("showId") Integer showId) {
+        contestantService.addShow(id, showId);
+    }
+
+    @DeleteMapping("/{id}/shows/{showId}")
+    public void deleteShow(@PathVariable("id") Integer id, @PathVariable("showId") Integer showId) {
+        contestantService.deleteShow(id, showId);
+    }
+
+
 }

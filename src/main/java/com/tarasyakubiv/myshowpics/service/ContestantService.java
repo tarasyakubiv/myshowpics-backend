@@ -3,6 +3,7 @@ package com.tarasyakubiv.myshowpics.service;
 import java.util.List;
 
 import com.tarasyakubiv.myshowpics.domain.Contestant;
+import com.tarasyakubiv.myshowpics.domain.GameShow;
 import com.tarasyakubiv.myshowpics.exception.ResourceNotFoundException;
 import com.tarasyakubiv.myshowpics.repository.ContestantRepository;
 
@@ -49,6 +50,14 @@ public class ContestantService {
             showService.updateShow(gameShow.getId(), gameShow);
         });                                 
         contestantRepository.delete(contestant);
+    }
+
+    public void addShow(Integer id, Integer showId) {
+        showService.addContestant(showService.getShow(showId), id);
+    }
+
+    public void deleteShow(Integer id, Integer showId) {
+        showService.deleteContestant(showService.getShow(showId), id);
     }
 
     public List<Contestant> findByNameIn(List<String> names) {

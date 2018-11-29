@@ -60,7 +60,7 @@ public class ImageController {
         return imageService.setShow(imageService.getImage(id), showId);
     }
 
-    @DeleteMapping("/{imageId}/shows")
+    @DeleteMapping("/{imageId}/shows/{showId}")
     public Image deleteShow(@PathVariable("imageId") Integer id) {
         return imageService.deleteShow(imageService.getImage(id));
     }

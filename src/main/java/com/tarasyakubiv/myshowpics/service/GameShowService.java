@@ -34,7 +34,8 @@ public class GameShowService {
     }
 
     public GameShow createShow(GameShow show) {
-        return showRepository.save(show);
+        GameShow showInUse = showRepository.findOptionalByName(show.getName()).orElse(show);
+        return showRepository.save(showInUse);
     }
 
     public GameShow updateShow(Integer id, GameShow show) {

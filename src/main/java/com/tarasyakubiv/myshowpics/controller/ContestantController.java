@@ -1,10 +1,12 @@
 package com.tarasyakubiv.myshowpics.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
 import com.tarasyakubiv.myshowpics.domain.Contestant;
+import com.tarasyakubiv.myshowpics.domain.Image;
 import com.tarasyakubiv.myshowpics.service.ContestantService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,11 @@ public class ContestantController {
     @DeleteMapping("/{id}/shows/{showId}")
     public void deleteShow(@PathVariable("id") Integer id, @PathVariable("showId") Integer showId) {
         contestantService.deleteShow(id, showId);
+    }
+
+    @GetMapping("/{id}/images")
+    public Set<Image> getImages(@PathVariable("id") Integer id) {
+        return contestantService.getImages(contestantService.getContestant(id));
     }
 
 

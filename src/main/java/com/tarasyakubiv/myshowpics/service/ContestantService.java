@@ -1,9 +1,10 @@
 package com.tarasyakubiv.myshowpics.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.tarasyakubiv.myshowpics.domain.Contestant;
-import com.tarasyakubiv.myshowpics.domain.GameShow;
+import com.tarasyakubiv.myshowpics.domain.Image;
 import com.tarasyakubiv.myshowpics.exception.ResourceNotFoundException;
 import com.tarasyakubiv.myshowpics.repository.ContestantRepository;
 
@@ -32,7 +33,8 @@ public class ContestantService {
     }
 
     public Contestant createContestant(Contestant contestant) {
-        return contestantRepository.save(contestant);
+        Contestant contestantInUse = contestantRepository.findOptionalByName(contestant.getName()).orElse(contestant);
+        return contestantRepository.save(contestantInUse);
     }
 
     public Contestant updateContestant(Integer id, Contestant newContestant) {
@@ -62,5 +64,9 @@ public class ContestantService {
 
     public List<Contestant> findByNameIn(List<String> names) {
         return contestantRepository.findByNameIn(names);
+    }
+
+    public Set<Image> getImages(Contestant contestant) {
+        return contestant.getImages();
     }
 }

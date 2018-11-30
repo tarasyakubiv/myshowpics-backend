@@ -35,7 +35,8 @@ public class ImageService {
     }
 
     public Image createImage(Image image) {
-        return imageRepository.save(image);
+        Image imageInUse = imageRepository.findOptionalByImage(image.getImage()).orElse(image);
+        return imageRepository.save(imageInUse);
     }
 
     public Image updateImage(Integer id, Image newImage) {

@@ -1,9 +1,11 @@
 package com.tarasyakubiv.myshowpics.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
+import com.tarasyakubiv.myshowpics.domain.Image;
 import com.tarasyakubiv.myshowpics.domain.Tag;
 import com.tarasyakubiv.myshowpics.service.TagService;
 
@@ -30,7 +32,7 @@ public class TagController {
         return tagService.getAllTags();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Tag getTag(@PathVariable("id") Integer id) {
         return tagService.getTag(id);
     }
@@ -43,5 +45,10 @@ public class TagController {
     @DeleteMapping("/{id}")
     public void deleteTag(@PathVariable("id") Integer id) {
         tagService.deleteTag(tagService.getTag(id));
+    }
+
+    @GetMapping("/{id}/images")
+    public Set<Image> getImages(@PathVariable("id") Integer id) {
+        return tagService.getImages(tagService.getTag(id));
     }
 }

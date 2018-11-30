@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.tarasyakubiv.myshowpics.domain.Contestant;
+import com.tarasyakubiv.myshowpics.domain.GameShow;
 import com.tarasyakubiv.myshowpics.domain.Image;
 import com.tarasyakubiv.myshowpics.domain.Tag;
 import com.tarasyakubiv.myshowpics.repository.ImageRepository;
@@ -28,10 +29,13 @@ public class ImageSearchService {
     @Autowired
     private ContestantService contestantService;
 
+    @Autowired
+    private GameShowService showService;
 
-    public Set<Image> findImages(Optional<String> show, Optional<String> tags, Optional<String> contestants, Optional<Boolean> tagsAnd, Optional<Boolean> contestantsAnd) {
+    public Set<Image> findImages(Optional<String> shows, Optional<String> tags, Optional<String> contestants, Optional<Boolean> tagsAnd, Optional<Boolean> contestantsAnd) {
         final List<Tag> tagsList;
         final List<Contestant> contestantsList;
+        final List<GameShow> showList;
         if(tags.isPresent()) {
             tagsList = tagService.findByNameIn(Arrays.asList(tags.get().split(",")));
         } else {
@@ -42,11 +46,15 @@ public class ImageSearchService {
         } else {
             contestantsList = new ArrayList<>();
         }
+        if(shows.isPresent()) {
+            showList = showService.findByNameIn(Arrays.asList(shows.get().split(",")));
+        } else {
+            showList = new ArrayList<>();
+        }
         Set<Image> resultImages = new HashSet<>();
-        imageRepository.findAll().parallelStream().forEach(image -> {
-            System.out.println(image.getId());
-            if(show.isPresent()) {
-                if(image.getGameShow() == null || !image.getGameShow().getName().equals(show.get())) {
+        imageRepository.findAll().forEach(image -> {
+            if(shows.isPresent()) {
+                if(image.getGameShow() == null || !showList.contains(image.getGameShow())) {
                     return;
                 }
             }
@@ -76,5 +84,7 @@ public class ImageSearchService {
         }); 
         return resultImages;
     }
+
+
 
 }

@@ -67,6 +67,10 @@ public class GameShowService {
         showRepository.save(show);
     }
 
+    public List<GameShow> findByNameIn(List<String> names) {
+        return showRepository.findByNameIn(names);
+    }
+
     public Set<Image> getImagesByShow(GameShow show) {
         return show.getImages();
     }

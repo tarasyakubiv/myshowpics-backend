@@ -22,7 +22,7 @@ public class ImageSearchController {
     ImageSearchService imageSearchService;
 
     @GetMapping
-    public Set<Image> findImages(@RequestParam(value="show", required = false) Optional<String> show,
+    public Set<Image> findImages(@RequestParam(value="shows", required = false) Optional<String> show,
                                     @RequestParam(value="tags", required = false) Optional<String> tags,
                                     @RequestParam(value="contestants", required = false) Optional<String> contestants,
                                     @RequestParam(value="tags_and", required = false) Optional<Boolean> tagsAnd,

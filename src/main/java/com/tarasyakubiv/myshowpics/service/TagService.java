@@ -1,7 +1,9 @@
 package com.tarasyakubiv.myshowpics.service;
 
 import java.util.List;
+import java.util.Set;
 
+import com.tarasyakubiv.myshowpics.domain.Image;
 import com.tarasyakubiv.myshowpics.domain.Tag;
 import com.tarasyakubiv.myshowpics.exception.ResourceNotFoundException;
 import com.tarasyakubiv.myshowpics.repository.ImageRepository;
@@ -39,6 +41,10 @@ public class TagService {
             imageRepository.save(image);
         });
         tagRepository.delete(tag);
+    }
+
+    public Set<Image> getImages(Tag tag) {
+        return tag.getImages();
     }
 
     public List<Tag> findByNameIn(List<String> names) {

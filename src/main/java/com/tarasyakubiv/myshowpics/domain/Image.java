@@ -36,11 +36,11 @@ public class Image {
     @NonNull
     private String image;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "gameshow_id")
     private GameShow gameShow;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "contestant_image", 
       joinColumns = @JoinColumn(name = "contestant_id", 
                                 referencedColumnName = "id"), 
@@ -48,7 +48,7 @@ public class Image {
                                       referencedColumnName = "id"))
 	  Set<Contestant> contestants = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(name = "tag_image", 
       joinColumns = @JoinColumn(name = "tag_id", 
                                 referencedColumnName = "id"), 

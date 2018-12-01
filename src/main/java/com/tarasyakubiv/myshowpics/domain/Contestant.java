@@ -34,7 +34,7 @@ public class Contestant {
     @NonNull
     private String name;
 
-    @ManyToMany(mappedBy = "contestants", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(mappedBy = "contestants", cascade = {CascadeType.PERSIST})
     private Set<Image> images = new HashSet<>();
 
     @ManyToMany(mappedBy = "contestants")

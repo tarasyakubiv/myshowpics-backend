@@ -3,10 +3,10 @@ package com.tarasyakubiv.myshowpics.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.tarasyakubiv.myshowpics.domain.Contestant;
 import com.tarasyakubiv.myshowpics.domain.GameShow;
@@ -51,7 +51,7 @@ public class ImageSearchService {
         } else {
             showList = new ArrayList<>();
         }
-        Set<Image> resultImages = new HashSet<>();
+        Set<Image> resultImages = new TreeSet<>();
         imageRepository.findAll().forEach(image -> {
             if(shows.isPresent()) {
                 if(image.getGameShow() == null || !showList.contains(image.getGameShow())) {

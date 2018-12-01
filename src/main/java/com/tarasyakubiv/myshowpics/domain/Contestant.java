@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -33,6 +34,10 @@ public class Contestant {
     @Column
     @NonNull
     private String name;
+
+    @Lob
+    @Column
+    private String description = "";
 
     @ManyToMany(mappedBy = "contestants", cascade = {CascadeType.PERSIST})
     private Set<Image> images = new HashSet<>();

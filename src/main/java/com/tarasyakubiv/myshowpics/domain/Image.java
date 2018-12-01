@@ -27,7 +27,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Image {
+public class Image implements Comparable<Image> {
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,6 +35,16 @@ public class Image {
     @Column(nullable = false)
     @NonNull
     private String image;
+
+    @Column
+    private String thumb = "";
+
+    @Column
+    @NonNull
+    private String name = "";
+
+    @Column
+    private String sourceLink = "";
 
     @ManyToOne(cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "gameshow_id")
@@ -55,5 +65,11 @@ public class Image {
       inverseJoinColumns = @JoinColumn(name = "image_id", 
                                       referencedColumnName = "id"))
 	  Set<Tag> tags = new HashSet<>();
+
+  @Override
+  public int compareTo(Image o) {
+    return this.id > o.id ? 1 : 
+                            this.id < o.id ? -1 : 0;
+  }
 
 }
